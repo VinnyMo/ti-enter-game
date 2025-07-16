@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>THE ENTER GAME - Vincent Mossman</title>
+    <style>
+        @font-face {
+            font-family: 'CalculatorFont';
+            src: url('data:font/truetype;charset=utf-8;base64,') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        body {
+            background: linear-gradient(145deg, #1a1a1a, #000);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', monospace;
+            color: #0f0;
+            overflow: hidden;
+        }
+        
+        .calculator-frame {
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            border: 3px solid #333;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 0, 0.3),
+                inset 0 0 20px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            width: 90vw;
+        }
+        
+        .screen-header {
+            text-align: center;
+            color: #0a0;
+            font-size: 14px;
+            margin-bottom: 10px;
+            padding: 5px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+        
+        .screen {
+            background: #000;
+            border: 3px solid #0f0;
+            border-radius: 8px;
+            width: 100%;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                inset 0 0 20px rgba(0, 255, 0, 0.1),
+                0 0 10px rgba(0, 255, 0, 0.2);
+        }
+        
+        .screen-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 15px;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.3;
+            overflow-y: auto;
+        }
+        
+        .screen-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .screen-content::-webkit-scrollbar-track {
+            background: #000;
+        }
+        
+        .screen-content::-webkit-scrollbar-thumb {
+            background: #0f0;
+            border-radius: 4px;
+        }
+        
+        .game-canvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #0a0;
+            background: #000;
+            image-rendering: pixelated;
+        }
+        
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .button {
+            background: linear-gradient(145deg, #333, #222);
+            border: 2px solid #0f0;
+            color: #0f0;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .button:hover {
+            background: linear-gradient(145deg, #0f0, #0a0);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .button:active {
+            transform: translateY(0);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+        
+        .button.primary {
+            background: linear-gradient(145deg, #0a0, #080);
+            color: #000;
+            border-color: #0f0;
+            font-size: 16px;
+            padding: 15px 30px;
+        }
+        
+        .button.primary:hover {
+            background: linear-gradient(145deg, #0f0, #0c0);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 10px;
+            color: #0a0;
+        }
+        
+        .menu-item {
+            margin: 3px 0;
+            cursor: pointer;
+            padding: 2px 0;
+        }
+        
+        .menu-item:hover {
+            background: rgba(0, 255, 0, 0.1);
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #0f0;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 10px;
+            color: #080;
+            margin-bottom: 15px;
+        }
+        
+        .pixel-art {
+            font-family: 'Courier New', monospace;
+            line-height: 1;
+            letter-spacing: 0;
+            white-space: pre;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        .blink {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(400px); }
+        }
+        
+        .screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(0, 255, 0, 0.3);
+            animation: scanline 3s linear infinite;
+            z-index: 10;
+        }
+        
+        .credits {
+            font-size: 8px;
+            color: #050;
+            text-align: center;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-frame {
+                width: 95vw;
+                padding: 15px;
+            }
+            
+            .screen {
+                height: 350px;
+            }
+            
+            .button {
+                padding: 10px 15px;
+                font-size: 12px;
+                min-width: 70px;
+            }
+            
+            .button.primary {
+                font-size: 14px;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-frame">
+        <div class="screen-header">
+            TI-83 PLUS - THE ENTER GAME v5.2
+        </div>
+        
+        <div class="screen">
+            <div class="screen-content" id="screen">
+                <div class="title">>>> THE ENTER GAME <<<</div>
+                <div class="subtitle">*MLI SOFTWARE TEAM*</div>
+                <div class="subtitle">Created by Vincent Mossman</div>
+                <br>
+                <div id="game-content">
+                    <div class="menu-item" onclick="startNewGame()">*START NEW GAME*</div>
+                    <div class="menu-item" onclick="continueGame()">*CONTINUE GAME*</div>
+                    <div class="menu-item" onclick="showHighScores()">*HIGH SCORES*</div>
+                    <div class="menu-item" onclick="showOther()">*OTHER*</div>
+                    <div class="menu-item" onclick="showCredits()">*CREDITS*</div>
+                    <div class="menu-item" onclick="exitGame()">*EXIT*</div>
+                </div>
+                
+                <canvas id="gameCanvas" class="game-canvas" width="300" height="200" style="display: none;"></canvas>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="button primary" id="enterBtn" onclick="handleEnter()">ENTER</button>
+            <button class="button" onclick="handleBack()">BACK TO MAIN MENU</button>
+        </div>
+        
+        <div class="credits">
+            Made in memory of Don F. Mossman, Billy Mays, M. Jackson, Farrah F., and other unfairly departed souls
+        </div>
+    </div>
+
+    <script>
+        // GAME STATE
+        let gameState = {
+            currentScreen: 'main-menu',
+            level: 1,
+            health: 10,         // GAME2: Original starts at 10 health
+            money: 0,
+            weapon: 1,
+            skillLevel: 1,
+            currentEnemy: null,
+            enemyHealth: 10,
+            enemyX: 220,        // Start enemies on the right side
+            enemyY: 160,         // Bottom area of screen
+            enemyBaseX: 220,     // Reset position for enemies
+            playerX: 30,         // Player on left side
+            playerY: 160,        // Same level as enemy
+            isEnemyAttacking: false,
+            gameMode: 'progress-quest',
+            isPlaying: false,
+            records: {
+                highestLevel: 1,
+                mostMoney: 0,
+                mostHealth: 9,
+                highestSkill: 1,
+                timesPlayed: 0
+            }
+        };
+
+        // ENEMIES
+        const enemies = {
+            rock: { name: 'ROCK', health: 10, sprite: '🪨', description: 'AN EVIL ROCK' },
+            bob: { name: 'BOB', health: 15, sprite: '👤', description: 'YOUR EVIL TWIN' },
+            giant: { name: 'GIANT', health: 25, sprite: '👹', description: 'A GIANT' }
+        };
+
+        // Initialize game
+        window.onload = function() {
+            loadGameData();
+            showMainMenu();
+            setupKeyboard();
+        };
+
+        // SAVE/LOAD SYSTEM
+        function saveGameData() {
+            localStorage.setItem('enterGameSave', JSON.stringify(gameState));
+        }
+
+        function loadGameData() {
+            const saved = localStorage.getItem('enterGameSave');
+            if (saved) {
+                gameState = { ...gameState, ...JSON.parse(saved) };
+            }
+        }
+
+        // SCREEN MANAGEMENT
+        function clearScreen() {
+            document.getElementById('screen').innerHTML = '';
+        }
+
+        function showText(text) {
+            const screen = document.getElementById('screen');
+            screen.innerHTML = text;
+        }
+
+        function showMainMenu() {
+            gameState.currentScreen = 'main-menu';
+            const hasSave = localStorage.getItem('enterGameSave') !== null;
+            
+            showText(`
+                <div class="title">>>> THE ENTER GAME <<<</div>
+                <div class="subtitle">*MLI SOFTWARE TEAM*</div>
+                <div class="subtitle">Created by Vincent Mossman</div>
+                <br><br>
+                <div class="menu-item" onclick="startNewGame()">*START NEW GAME*</div>
+                ${hasSave ? '<div class="menu-item" onclick="continueGame()">*CONTINUE GAME*</div>' : ''}
+                <div class="menu-item" onclick="showHighScores()">*HIGH SCORES*</div>
+                <div class="menu-item" onclick="showOther()">*OTHER*</div>
+                <div class="menu-item" onclick="showCredits()">*CREDITS*</div>
+                <div class="menu-item" onclick="exitGame()">*EXIT*</div>
+            `);
+        }
+
+        // GAME FUNCTIONS
+        function startNewGame() {
+            gameState.level = 1;
+            gameState.health = 10;       // Original starts with 10 health
+            gameState.money = 0;
+            gameState.weapon = 1;
+            gameState.skillLevel = 1;
+            gameState.records.timesPlayed++;
+            saveGameData();
+            startLevel();
+        }
+
+        function continueGame() {
+            loadGameData();
+            startLevel();
+        }
+
+        function startLevel() {
+            gameState.currentScreen = 'playing';
+            gameState.isPlaying = true;
+            gameState.isEnemyAttacking = false;
+            gameState.enemyX = gameState.enemyBaseX; // Reset enemy position
+            
+            // Select enemy based on level (cycles every 5 levels like original)
+            const enemyTypes = ['rock', 'bob', 'giant'];
+            const enemyType = enemyTypes[Math.floor((gameState.level - 1) / 5) % 3];
+            gameState.currentEnemy = enemyType;
+            gameState.enemyHealth = enemies[enemyType].health + (gameState.level * 2);
+            
+            showGameScreen();
+            startGameLoop();
+        }
+
+        function showGameScreen() {
+            const enemy = enemies[gameState.currentEnemy];
+            showText(`
+                <div class="stats-bar">
+                    <span>LVL: ${gameState.level}</span>
+                    <span>HEALTH: ${gameState.health}</span>
+                    <span>MONEY: $${gameState.money}</span>
+                    <span>WEAPON: x${gameState.weapon}</span>
+                </div>
+                <div class="title">LEVEL ${gameState.level}</div>
+                <div class="subtitle">Enemy: ${enemy.name} (${gameState.enemyHealth} HP)</div>
+                <br>
+                <canvas id="gameCanvas" class="game-canvas" width="300" height="200"></canvas>
+                <br><br>
+                <div style="text-align: center;">
+                    <div class="blink">PRESS ENTER TO ATTACK!</div>
+                    <br>
+                    <div>Weapon Bonus: x${gameState.weapon}</div>
+                    <div>Skill Level: ${gameState.skillLevel}</div>
+                    <br>
+                    <div style="font-size: 10px; color: #080;">PRESS ENTER TO ATTACK • BACK TO MAIN MENU TO QUIT</div>
+                </div>
+            `);
+            
+            const canvas = document.getElementById('gameCanvas');
+            canvas.style.display = 'block';
+            drawGame();
+        }
+
+        function drawGame() {
+            const canvas = document.getElementById('gameCanvas');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, 300, 200);
+            
+            // Draw player (stick figure)
+            ctx.fillStyle = '#0f0';
+            drawStickFigure(ctx, gameState.playerX, gameState.playerY);
+            
+            // Draw enemy based on type
+            ctx.fillStyle = '#f00';
+            drawEnemy(ctx, gameState.enemyX, gameState.enemyY, gameState.currentEnemy);
+            
+            // Draw health bars
+            ctx.fillStyle = '#0f0';
+            ctx.font = '10px monospace';
+            ctx.fillText(`YOU: ${gameState.health} HP`, 10, 15);
+            ctx.fillStyle = '#f00';
+            ctx.fillText(`${enemies[gameState.currentEnemy].name}: ${gameState.enemyHealth} HP`, 10, 30);
+        }
+        
+        function drawStickFigure(ctx, x, y) {
+            // Proper stick figure pattern - corrected orientation
+            // Head at top, body down, arms out, legs at bottom
+            const pixels = [
+                // Head
+                [2, 0], [3, 0],
+                // Body (vertical line down the middle)
+                [2, 1], [2, 2], [2, 3], [2, 4],
+                // Arms (horizontal line across middle)
+                [0, 2], [1, 2], [4, 2], [5, 2],
+                // Legs (diagonal from bottom)
+                [1, 5], [3, 5]
+            ];
+            
+            // Scale up for visibility
+            pixels.forEach(([px, py]) => {
+                ctx.fillRect(x + px * 3, y + py * 3, 2, 2);
+            });
+        }
+        
+        function drawEnemy(ctx, x, y, enemyType) {
+            let pixels = [];
+            
+            if (enemyType === 'rock') {
+                // ROCK sprite - corrected from original coordinates
+                pixels = [
+                    [0, 0], [1, 0], [2, 0],    // Top row
+                    [0, 1], [1, 1], [2, 1],    // Middle row  
+                    [0, 2], [1, 2], [2, 2]     // Bottom row (compact rock)
+                ];
+            } else if (enemyType === 'bob') {
+                // BOB sprite - corrected orientation (humanoid "evil twin")
+                pixels = [
+                    // Head
+                    [2, 0], [3, 0],
+                    // Body vertical
+                    [2, 1], [2, 2], [2, 3], [3, 1], [3, 2], [3, 3],
+                    // Arms horizontal
+                    [0, 2], [1, 2], [4, 2], [5, 2],
+                    // Legs
+                    [1, 4], [2, 4], [3, 4], [4, 4],
+                    // Details (making it more complex than player)
+                    [1, 1], [4, 1], [1, 3], [4, 3]
+                ];
+            } else if (enemyType === 'giant') {
+                // GIANT sprite - corrected orientation (large complex figure)
+                pixels = [
+                    // Head (larger)
+                    [3, 0], [4, 0], [5, 0],
+                    [2, 1], [3, 1], [4, 1], [5, 1], [6, 1],
+                    // Body (wider and taller)
+                    [3, 2], [4, 2], [5, 2],
+                    [2, 3], [3, 3], [4, 3], [5, 3], [6, 3],
+                    [2, 4], [3, 4], [4, 4], [5, 4], [6, 4],
+                    [3, 5], [4, 5], [5, 5],
+                    // Arms (longer)
+                    [0, 3], [1, 3], [7, 3], [8, 3],
+                    [0, 4], [1, 4], [7, 4], [8, 4],
+                    // Legs (wider)
+                    [1, 6], [2, 6], [3, 6], [5, 6], [6, 6], [7, 6],
+                    [1, 7], [2, 7], [6, 7], [7, 7],
+                    // Extensions (making it giant-sized)
+                    [4, 8], [5, 8]
+                ];
+            }
+            
+            pixels.forEach(([px, py]) => {
+                ctx.fillRect(x + px * 2, y + py * 2, 2, 2);
+            });
+        }
+
+        function handleEnter() {
+            if (gameState.currentScreen === 'playing' && gameState.isPlaying) {
+                attackEnemy();
+            } else {
+                // If not in gameplay, try to click the first menu item
+                const firstMenuItem = document.querySelector('.menu-item');
+                if (firstMenuItem) {
+                    firstMenuItem.click();
+                }
+            }
+        }
+
+        function attackEnemy() {
+            // Damage = weapon bonus (like original)
+            const damage = gameState.weapon;
+            gameState.enemyHealth -= damage;
+            
+            if (gameState.enemyHealth <= 0) {
+                winLevel();
+                return; // Don't update screen or continue game loop
+            } else {
+                // Enemy counter-attacks by moving towards player
+                startEnemyAttack();
+            }
+            
+            showGameScreen();
+        }
+        
+        function startEnemyAttack() {
+            if (gameState.isEnemyAttacking) return;
+            
+            gameState.isEnemyAttacking = true;
+            gameState.enemyX = gameState.enemyBaseX; // Reset to right side
+            
+            // TI-83 calculator timing: much slower, deliberate movement
+            const baseSpeed = 800; // Base interval in ms (like calculator speed)
+            const skillMultiplier = Math.max(0.5, 1 - (gameState.skillLevel * 0.1)); // Higher skill = faster
+            const moveInterval = Math.floor(baseSpeed * skillMultiplier);
+            
+            const attackInterval = setInterval(() => {
+                if (!gameState.isPlaying) {
+                    clearInterval(attackInterval);
+                    gameState.isEnemyAttacking = false;
+                    return;
+                }
+                
+                // Move enemy left one "step" at a time (like original calculator)
+                gameState.enemyX -= 8; // Discrete 8-pixel steps
+                
+                // Check collision with player (same Y level, overlapping X)
+                const playerLeft = gameState.playerX;
+                const playerRight = gameState.playerX + 18; // Player sprite width (6*3)
+                const enemyLeft = gameState.enemyX;
+                const enemyRight = gameState.enemyX + 20; // Enemy sprite width
+                
+                // Collision: overlapping X ranges at bottom of screen
+                if (enemyLeft <= playerRight && enemyRight >= playerLeft &&
+                    Math.abs(gameState.enemyY - gameState.playerY) < 5) {
+                    // Enemy touched player - damage!
+                    gameState.health--;
+                    gameState.enemyX = gameState.enemyBaseX; // Push enemy back to right
+                    clearInterval(attackInterval);
+                    gameState.isEnemyAttacking = false;
+                    
+                    if (gameState.health <= 0) {
+                        gameOver();
+                        return;
+                    }
+                    
+                    // Update display after damage
+                    showGameScreen();
+                    return;
+                }
+                
+                // Enemy missed player (went too far left)
+                if (gameState.enemyX < -40) {
+                    gameState.enemyX = gameState.enemyBaseX;
+                    clearInterval(attackInterval);
+                    gameState.isEnemyAttacking = false;
+                }
+                
+                // Update display
+                if (gameState.isPlaying) {
+                    drawGame();
+                }
+            }, moveInterval); // TI-83 calculator speed
+        }
+
+        function winLevel() {
+            gameState.money += 10;
+            gameState.level++;
+            gameState.isPlaying = false;
+            
+            // Update records
+            gameState.records.highestLevel = Math.max(gameState.records.highestLevel, gameState.level);
+            gameState.records.mostMoney = Math.max(gameState.records.mostMoney, gameState.money);
+            gameState.records.mostHealth = Math.max(gameState.records.mostHealth, gameState.health);
+            
+            saveGameData();
+            
+            showText(`
+                <div class="title">*** YOU WON! ***</div>
+                <div class="subtitle">LEVEL ${gameState.level - 1} COMPLETE</div>
+                <br>
+                <div>+ 10 MONEY EARNED</div>
+                <div>TOTAL MONEY: $${gameState.money}</div>
+                <br>
+                <div class="menu-item" onclick="startLevel()">*NEXT LEVEL*</div>
+                <div class="menu-item" onclick="showStore()">*STORE*</div>
+                <div class="menu-item" onclick="showLevelSummary()">*LEVEL SUMMARY*</div>
+                <div class="menu-item" onclick="showMainMenu()">*GAME MENU*</div>
+                <div class="menu-item" onclick="exitGame()">*QUIT*</div>
+            `);
+        }
+
+        function gameOver() {
+            gameState.isPlaying = false;
+            showText(`
+                <div class="title">*** GAME OVER ***</div>
+                <div class="subtitle">You reached level ${gameState.level}</div>
+                <br>
+                <div>Final Score: $${gameState.money}</div>
+                <div>Levels completed: ${gameState.level - 1}</div>
+                <br>
+                <div class="menu-item" onclick="startNewGame()">*START NEW GAME*</div>
+                <div class="menu-item" onclick="showHighScores()">*HIGH SCORES*</div>
+                <div class="menu-item" onclick="showMainMenu()">*GAME MENU*</div>
+            `);
+        }
+
+        function showStore() {
+            showText(`
+                <div class="title">*** STORE ***</div>
+                <div class="subtitle">Current Money: $${gameState.money}</div>
+                <br>
+                <div class="menu-item" onclick="buyWeapon()">*WEAPON +1 - $100*</div>
+                <div class="menu-item" onclick="buyHealth()">*HEALTH +1 - $20*</div>
+                <div class="menu-item" onclick="goBack()">*NOTHING*</div>
+            `);
+        }
+
+        function buyWeapon() {
+            // Original: weapon upgrade costs 100 money (permanent)
+            if (gameState.money >= 100) {
+                gameState.money -= 100;
+                gameState.weapon++;
+                saveGameData();
+                showText(`
+                    <div class="title">WEAPON PURCHASED!</div>
+                    <div>Your weapon is now x${gameState.weapon}</div>
+                    <br>
+                    <div class="menu-item" onclick="showStore()">*CONTINUE SHOPPING*</div>
+                    <div class="menu-item" onclick="goBack()">*BACK TO GAME*</div>
+                `);
+            } else {
+                showText(`
+                    <div class="title">NOT ENOUGH MONEY</div>
+                    <div>You need $100 for weapon upgrade</div>
+                    <br>
+                    <div class="menu-item" onclick="showStore()">*BACK TO STORE*</div>
+                `);
+            }
+        }
+
+        function buyHealth() {
+            if (gameState.money >= 20) {
+                gameState.money -= 20;
+                gameState.health++;
+                saveGameData();
+                showText(`
+                    <div class="title">HEALTH PURCHASED!</div>
+                    <div>Your health is now ${gameState.health}</div>
+                    <br>
+                    <div class="menu-item" onclick="showStore()">*CONTINUE SHOPPING*</div>
+                    <div class="menu-item" onclick="goBack()">*BACK TO GAME*</div>
+                `);
+            } else {
+                showText(`
+                    <div class="title">NOT ENOUGH MONEY</div>
+                    <div>You need $20 for health upgrade</div>
+                    <br>
+                    <div class="menu-item" onclick="showStore()">*BACK TO STORE*</div>
+                `);
+            }
+        }
+
+        function showHighScores() {
+            showText(`
+                <div class="title">*** HIGH SCORES ***</div>
+                <br>
+                <div>HIGHEST LEVEL: ${gameState.records.highestLevel}</div>
+                <div>HIGHEST MONEY: $${gameState.records.mostMoney}</div>
+                <div>MOST HEALTH: ${gameState.records.mostHealth}</div>
+                <div>HIGHEST SKILL: ${gameState.records.highestSkill}</div>
+                <div>TIMES PLAYED: ${gameState.records.timesPlayed}</div>
+                <br>
+                <div class="menu-item" onclick="showMainMenu()">*BACK TO MENU*</div>
+            `);
+        }
+
+        function showCredits() {
+            showText(`
+                <div class="title">*** CREDITS ***</div>
+                <br>
+                <div>DESIGNER: VINCENT MOSSMAN</div>
+                <div>PROGRAMMER: VINCENT MOSSMAN</div>
+                <div>EDITOR: VINCENT MOSSMAN</div>
+                <div>SPECIAL THANKS: VINCENT MOSSMAN</div>
+                <br>
+                <div class="subtitle">GAME MADE IN MEMORY OF:</div>
+                <div>DON F. MOSSMAN</div>
+                <div>BILLY MAYS</div>
+                <div>M. JACKSON</div>
+                <div>FARRAH F.</div>
+                <div>OTHER DEAD FAMOUS PEOPLE</div>
+                <div>PEOPLE WHO HAVE DIED UNFAIRLY</div>
+                <br>
+                <div class="subtitle">THIS PROGRAM MADE IN USA</div>
+                <div class="subtitle">VERSION 5.2</div>
+                <br>
+                <div class="menu-item" onclick="showMainMenu()">*BACK TO MENU*</div>
+            `);
+        }
+
+        function showGameRoom() {
+            showText(`
+                <div class="title">*** GAMEROOM ***</div>
+                <br>
+                <div class="menu-item" onclick="setGameMode('endless')">*ENDLESS PUSHING*</div>
+                <div class="menu-item" onclick="setGameMode('progress')">*PROGRESS QUEST*</div>
+                <div class="menu-item" onclick="showMainMenu()">*BACK TO MENU*</div>
+            `);
+        }
+
+        function showOther() {
+            showText(`
+                <div class="title">*** OTHER ***</div>
+                <br>
+                <div class="menu-item" onclick="showRules()">*RULES*</div>
+                <div class="menu-item" onclick="showInfo()">*INFO*</div>
+                <div class="menu-item" onclick="masterReset()">*MASTER RESET*</div>
+                <div class="menu-item" onclick="showMainMenu()">*GAME MENU*</div>
+            `);
+        }
+
+        function showRules() {
+            showText(`
+                <div class="title">*** RULES ***</div>
+                <br>
+                <div>ONCE GAME IS STARTED, PRESS</div>
+                <div>ENTER TO CAUSE DAMAGE TO ENEMY</div>
+                <br>
+                <div>HEALTH: WHEN ENEMY TOUCHES YOU,</div>
+                <div>YOU LOSE 1 POINT HEALTH AND</div>
+                <div>ENEMY IS PUSHED BACK</div>
+                <br>
+                <div>WEAPON BONUS: THE WEAPON BONUS</div>
+                <div>IS THE AMOUNT TAKEN AWAY FROM</div>
+                <div>ENEMY HEALTH</div>
+                <br>
+                <div>YOUR MONEY: WHEN YOU BEAT A</div>
+                <div>LEVEL, 10 MONEY IS ADDED TO</div>
+                <div>YOUR TOTAL MONEY</div>
+                <br>
+                <div class="menu-item" onclick="showOther()">*BACK*</div>
+            `);
+        }
+
+        function showInfo() {
+            showText(`
+                <div class="title">*** INFO ***</div>
+                <br>
+                <div>SKILL LEVEL: THE SKILL LVL IS</div>
+                <div>THE SPEED AT WHICH THE ENEMY</div>
+                <div>ATTACKS</div>
+                <br>
+                <div>LEVEL: ENEMY GETS MORE HEALTH</div>
+                <div>ON EACH LVL</div>
+                <br>
+                <div>ENEMIES:</div>
+                <div>ROCK: AN EVIL ROCK</div>
+                <div>BOB: YOUR EVIL TWIN</div>
+                <div>GIANT: A GIANT</div>
+                <br>
+                <div class="menu-item" onclick="showOther()">*BACK*</div>
+            `);
+        }
+
+        function masterReset() {
+            if (confirm('MASTER RESET: RESETS HIGH SCORES AND SAVED GAME. ARE YOU SURE?')) {
+                localStorage.removeItem('enterGameSave');
+                gameState = {
+                    currentScreen: 'main-menu',
+                    level: 1,
+                    health: 10,         // GAME2: Original starts at 10 health
+                    money: 0,
+                    weapon: 1,
+                    skillLevel: 1,
+                    currentEnemy: null,
+                    enemyHealth: 10,
+                    enemyX: 220,
+                    enemyBaseX: 220,
+                    isEnemyAttacking: false,
+                    enemyY: 160,         // Bottom area of screen
+                    playerX: 30,         // Player on left side
+                    playerY: 160,        // Same level as enemy
+                    gameMode: 'progress-quest',
+                    isPlaying: false,
+                    records: {
+                        highestLevel: 1,
+                        mostMoney: 0,
+                        mostHealth: 9,
+                        highestSkill: 1,
+                        timesPlayed: 0
+                    }
+                };
+                showText(`
+                    <div class="title">THE ENTER GAME HAS BEEN RESET</div>
+                    <br>
+                    <div class="menu-item" onclick="showMainMenu()">*BACK TO MENU*</div>
+                `);
+            }
+        }
+
+        function goBack() {
+            if (gameState.isPlaying) {
+                showGameScreen();
+            } else {
+                showMainMenu();
+            }
+        }
+
+        function exitGame() {
+            showText(`
+                <div class="title">THANKS FOR PLAYING!</div>
+                <div class="subtitle">THE ENTER GAME v5.2</div>
+                <div class="subtitle">by Vincent Mossman</div>
+                <br>
+                <div class="menu-item" onclick="showMainMenu()">*RESTART GAME*</div>
+            `);
+        }
+
+        // KEYBOARD CONTROLS
+        function setupKeyboard() {
+            document.addEventListener('keydown', function(e) {
+                switch(e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        handleEnter();
+                        break;
+                    case 'ArrowUp':
+                    case 'ArrowDown':
+                    case 'ArrowLeft':
+                    case 'ArrowRight':
+                        // Arrow keys not used in this game
+                        break;
+                    case 'Escape':
+                        e.preventDefault();
+                        handleBack();
+                        break;
+                }
+            });
+        }
+
+        function handleUp() {
+            // Not used in this game
+        }
+
+        function handleDown() {
+            // Not used in this game
+        }
+
+        function handleLeft() {
+            // Not used in this game
+        }
+
+        function handleRight() {
+            // Not used in this game
+        }
+
+        function handleBack() {
+            // Always go back to main menu from any screen
+            gameState.isPlaying = false;
+            gameState.isEnemyAttacking = false;
+            if (gameState.gameLoopId) {
+                clearInterval(gameState.gameLoopId);
+            }
+            showMainMenu();
+        }
+
+        // GAME LOOP
+        function startGameLoop() {
+            // Minimal game loop - enemy only moves when attacking
+            gameState.gameLoopId = setInterval(() => {
+                if (gameState.isPlaying && !gameState.isEnemyAttacking) {
+                    // Just redraw the static scene (no random movement)
+                    
+                    drawGame();
+                }
+            }, 1000); // Slow refresh rate like TI-83
+        }
+
+        // Utility functions
+        function setGameMode(mode) {
+            gameState.gameMode = mode;
+            showMainMenu();
+        }
+
+        function showLevelSummary() {
+            showText(`
+                <div class="title">LEVEL ${gameState.level - 1} SUMMARY</div>
+                <br>
+                <div>+ 10 MONEY</div>
+                <div>LOST 0 HEALTH</div>
+                <br>
+                <div>NEW LVL RECORD: ${gameState.level > gameState.records.highestLevel ? 'YES' : 'NO'}</div>
+                <div>NEW MONEY RECORD: ${gameState.money > gameState.records.mostMoney ? 'YES' : 'NO'}</div>
+                <div>NEW HEALTH RECORD: ${gameState.health > gameState.records.mostHealth ? 'YES' : 'NO'}</div>
+                <br>
+                <div class="menu-item" onclick="startLevel()">*CONTINUE*</div>
+            `);
+        }
+    </script>
+</body>
+</html>
