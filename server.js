@@ -1,4 +1,5 @@
 const express = require('express');
+const helmet = require('helmet');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -8,6 +9,26 @@ const app = express();
 const PORT = 3002;
 
 // Middleware
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: [
+        "'self'", 
+        "'unsafe-inline'", 
+        "'unsafe-eval'",
+        "static.cloudflareinsights.com",
+        "https://static.cloudflareinsights.com"
+      ],
+      scriptSrcAttr: ["'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      imgSrc: ["'self'", "data:"],
+      connectSrc: ["'self'", "cloudflareinsights.com", "https://cloudflareinsights.com"],
+      objectSrc: ["'none'"],
+      baseUri: ["'self'"]
+    }
+  }
+}));
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
