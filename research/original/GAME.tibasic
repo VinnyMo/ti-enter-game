@@ -1,0 +1,387 @@
+::::::::::::::::::::::::::::::::"METH LABS INC SOFTWARE TEAM..."
+"IF YOU ARE PLANNING ON EDITING THIS CODE,     PLEASE DO SO        RESPECTFULLY AND ONLY TO    IMPROVE.  MUCH  TIME AND EFFORT WAS PUT INTO    THIS APP.                            THANKS..."
+::::::::::::::::Lbl G1
+Menu("GAMEROOM","ENTER GAME",G9,"ENDLESS PUSHING",G8,"PROGRESS QUEST",G7)
+::::::::::::::::::::::::::::::::ClrHome
+Lbl G7
+prgmPQ
+ClrHome
+Lbl G8
+Lbl EP
+ClrHome
+Disp "CURRENT SCORE:",ʟGAME(100),"","PRESS ENTER TO"," LEVEL UP"
+ʟGAME(100)+1→ʟGAME(100)
+Pause 
+ClrHome
+Disp "SCORE +1","","PRESS ENTER TO"," RETURN TO GAME"
+Pause 
+ClrHome
+Goto EP
+ClrHome
+
+Lbl G9
+"NOTES,"
+"PLAY IS 14"
+"WE1 IS 13"
+"WEAPON IS 4"
+"CUR LVL IS 6"
+"LVL HIGH IS 1":"SKILL HI IS 3":"MONEY HI IS 8":"HEALTH HI 9"
+"SL LVL IS 11"
+"LVL SL IS 12"
+"CUR SL IS 10"
+"CUR HEALTH IS 2"
+"EXTRA VARS"
+"T IS WEAPON"
+::::::::::::::::::::::::::::::::ZStandard
+AxesOff
+CoordOff
+0→A:0→B:0→C:0→D:0→E:0→F:0→G:0→H:0→I:0→K:0→L:0→M:0→N:0→O:0→P:0→Q:0→R:0→S:0→T:0→U:0→V:0→W:0→X:0→Y:0→Z
+ʟGAME(14)+1→ʟGAME(14)
+ClrDraw
+RecallPic 2
+Text(21+(7*5),45,"PRESS ENTER...")
+Pause 
+ClrDraw
+Lbl θθ
+ClrHome
+1→ʟGAME(13)
+62→A
+0→B
+Menu("THE ENTER GAME","START",A3,"HIGH SCORES",HS,"OTHER",OT,"GAMEROOM MENU",G1,"EXIT",A2)
+Lbl A2
+ZStandard
+AxesOn
+CoordOn
+ClrDraw
+ClrHome
+Stop
+End
+Lbl A3
+If ʟGAME(6)>1
+Goto A4
+If ʟGAME(6)≤1
+Goto A9
+Lbl A4
+ClrDraw
+ClrHome
+Menu("CONTINUE GAME?","CONTINUE...",A9,"START NEW GAME",A8)
+Lbl A9
+1→U
+Goto A1
+Lbl A8
+1→U
+Goto A5
+Lbl A1
+0→Z
+If B+5≥85
+Goto KK
+If U≠1
+Goto U1
+If U=1
+Goto U2
+Lbl U2
+Pxl-On(62,85):Pxl-On(61,86):Pxl-On(60,87):Pxl-On(61,88):Pxl-On(62,89):Pxl-On(59,87):Pxl-On(58,87):Pxl-On(57,87):Pxl-On(56,87):Pxl-On(55,87):Pxl-On(57,86):Pxl-On(57,85):Pxl-On(57,88):Pxl-On(57,89):Pxl-On(54,86):Pxl-On(54,88):Pxl-On(53,86):Pxl-On(53,88):Pxl-On(52,87)
+Text(0,0,"YOUR HEALTH : ",ʟGAME(2)):Text(7,0,"WEAPON BONUS : X",(ʟGAME(4)*ʟGAME(13)):Text(7*4,0,"LVL : ",ʟGAME(6)):Text(7*2,0,"YOUR MONEY : ",ʟGAME(7):Text(7*3,0,"SKILL LVL : ",ʟGAME(10)
+Lbl U1
+If ʟGAME(6)≤5
+Goto E1
+If ʟGAME(6)>5 and ʟGAME(6)<15
+Goto E2
+If ʟGAME(6)≥15
+Goto E3
+Lbl E1
+Pxl-On(A,B+4):Pxl-On(A,B+3):Pxl-On(A-1,B+2):Pxl-On(A-2,B+2):Pxl-On(A-3,B+3):Pxl-On(A-3,B+4):Pxl-On(A-2,B+5):Pxl-On(A-1,B+5):Text(A-10,B+3,ʟGAME(5))
+Goto RE
+Lbl E2
+Pxl-On(A,B):Pxl-On(A-1,B+1):Pxl-On(A-2,B+2):Pxl-On(A-1,B+3):Pxl-On(A,B+4):Pxl-On(A-3,B+2):Pxl-On(A-4,B+2):Pxl-On(A-5,B+2):Pxl-On(A-6,B+2):Pxl-On(A-7,B+2):Pxl-On(A-5,B+1):Pxl-On(A-5,B):Pxl-On(A-5,B+3):Pxl-On(A-5,B+4):Pxl-On(A-8,B+1):Pxl-On(A-9,B+1):Pxl-On(A-10,B+2):Pxl-On(A-9,B+3):Pxl-On(A-8,B+3):Text(A-17,B+1,ʟGAME(5))
+Goto RE
+Lbl E3
+Pxl-On(A,B):Pxl-On(A-1,B+1):Pxl-On(A-2,B+2):Pxl-On(A-3,B+3):Pxl-On(A-4,B+4):Pxl-On(A-3,B+5):Pxl-On(A-2,B+6):Pxl-On(A-1,B+7):Pxl-On(A,B+8):Pxl-On(A-5,B+4):Pxl-On(A-6,B+4):Pxl-On(A-7,B+4):Pxl-On(A-8,B+4):Pxl-On(A-9,B+4):Pxl-On(A-10,B+4):Pxl-On(A-11,B+4):Pxl-On(A-12,B+4):Pxl-On(A-13,B+4):Pxl-On(A-9,B+3):Pxl-On(A-9,B+2):Pxl-On(A-9,B+1):Pxl-On(A-9,B):Pxl-On(A-9,B+5):Pxl-On(A-9,B+6):Pxl-On(A-9,B+7):Pxl-On(A-9,B+8)
+Pxl-On(A-14,B+5):Pxl-On(A-15,B+6):Pxl-On(A-16,B+6):Pxl-On(A-17,B+6):Pxl-On(A-18,B+5):Pxl-On(A-18,B+4):Pxl-On(A-18,B+3):Pxl-On(A-17,B+2):Pxl-On(A-16,B+2):Pxl-On(A-15,B+2):Pxl-On(A-14,B+3)
+Text(A-25,B+3,ʟGAME(5))
+Goto RE
+Lbl RE
+Pause 
+If ʟGAME(6)≤5
+Goto D9
+If ʟGAME(6)>5 and ʟGAME(6)<15
+Goto D8
+If ʟGAME(6)≥15
+Goto D7
+Lbl D9
+Pxl-Off(A,B+4):Pxl-Off(A,B+3):Pxl-Off(A-1,B+2):Pxl-Off(A-2,B+2):Pxl-Off(A-3,B+3):Pxl-Off(A-3,B+4):Pxl-Off(A-2,B+5):Pxl-Off(A-1,B+5):Text(A-10,B+3,"          ")
+Goto DD
+Lbl D8
+Pxl-Off(A,B):Pxl-Off(A-1,B+1):Pxl-Off(A-2,B+2):Pxl-Off(A-1,B+3):Pxl-Off(A,B+4):Pxl-Off(A-3,B+2):Pxl-Off(A-4,B+2):Pxl-Off(A-5,B+2):Pxl-Off(A-6,B+2):Pxl-Off(A-7,B+2):Pxl-Off(A-5,B+1):Pxl-Off(A-5,B):Pxl-Off(A-5,B+3):Pxl-Off(A-5,B+4):Pxl-Off(A-9,B+1):Pxl-Off(A-8,B+1):Pxl-Off(A-10,B+2):Pxl-Off(A-9,B+3):Pxl-Off(A-8,B+3):Text(A-17,B+1,"      ")
+Goto DD
+Lbl D7
+Pxl-Off(A,B):Pxl-Off(A-1,B+1):Pxl-Off(A-2,B+2):Pxl-Off(A-3,B+3):Pxl-Off(A-4,B+4):Pxl-Off(A-3,B+5):Pxl-Off(A-2,B+6):Pxl-Off(A-1,B+7):Pxl-Off(A,B+8):Pxl-Off(A-5,B+4):Pxl-Off(A-6,B+4):Pxl-Off(A-7,B+4):Pxl-Off(A-8,B+4):Pxl-Off(A-9,B+4):Pxl-Off(A-10,B+4):Pxl-Off(A-11,B+4):Pxl-Off(A-12,B+4):Pxl-Off(A-13,B+4):Pxl-Off(A-9,B+3):Pxl-Off(A-9,B+2):Pxl-Off(A-9,B+1):Pxl-Off(A-9,B):Pxl-Off(A-9,B+5):Pxl-Off(A-9,B+6):Pxl-Off(A-9,B+7):Pxl-Off(A-9,B+8)
+Pxl-Off(A-17,B+2):Pxl-Off(A-14,B+5):Pxl-Off(A-15,B+6):Pxl-Off(A-16,B+6):Pxl-Off(A-17,B+6):Pxl-Off(A-18,B+5):Pxl-Off(A-18,B+4):Pxl-Off(A-18,B+3):Pxl-Off(A-16,B+2):Pxl-Off(A-15,B+2):Pxl-Off(A-14,B+3)
+Text(A-25,B+3,"          "):Text(A-25,B+9,"    "):Text(A-25,B+10,"   "):Text(A-25,B+11,"   ")
+Goto DD
+Lbl DD
+B+ʟGAME(10)→B
+ʟGAME(5)-(ʟGAME(4)*ʟGAME(13)→ʟGAME(5)
+If ʟGAME(5)≤0
+Goto WN
+If ʟGAME(5)>0
+0→U
+Goto A1
+Lbl WN
+If ʟGAME(1)≤ʟGAME(6)
+ʟGAME(6)→ʟGAME(1)
+If ʟGAME(1)≤ʟGAME(6)
+Z+1→Z
+If ʟGAME(1)≤ʟGAME(6)
+ʟGAME(10)→ʟGAME(12)
+If ʟGAME(8)≤ʟGAME(7)
+ʟGAME(7)→ʟGAME(8)
+If ʟGAME(8)≤ʟGAME(7)
+X+1→X
+If ʟGAME(9)≤ʟGAME(2)
+ʟGAME(2)→ʟGAME(9)
+If ʟGAME(9)≤ʟGAME(2)
+Y+1→Y
+If ʟGAME(3)≤ʟGAME(10)
+ʟGAME(10)→ʟGAME(3)
+If ʟGAME(3)≤ʟGAME(10)
+ʟGAME(6)→ʟGAME(11)
+If ʟGAME(3)≤ʟGAME(10)
+Q+1→Q
+1→U
+ClrDraw
+Menu("YOU WON!","NEXT LEVEL",W1,"STORE",ST,"ADJUST SKILL",O1,"LEVEL SUMMARY",GN,"GAME MENU",θθ,"QUIT",A2)
+ClrHome
+Lbl W1
+ʟGAME(7)+10→ʟGAME(7)
+ʟGAME(6)+1→ʟGAME(6)
+ʟGAME(5)+ʟGAME(6)+4→ʟGAME(5)
+1→B
+0→K
+Goto A1
+Lbl ST
+ClrHome
+Disp "CURRENT MONEY ="
+Output(2,1,ʟGAME(7)
+Pause 
+ClrHome
+Menu("BUY","WEAPON+1 -15",S1,"HEALTH+1 -20",S2,"NOTHING",WN)
+Lbl WE
+ClrHome
+If ʟGAME(13)=2
+Goto AP
+If ʟGAME(13)≠2
+Disp "WEAPON EXTRA 1:","YOUR WEAPON X2"," ","COST: 100"
+Pause 
+ClrHome
+If ʟGAME(7)-100<0
+Goto N1
+If ʟGAME(7)-100≥0
+ʟGAME(7)-100→ʟGAME(7)
+2→ʟGAME(13)
+Goto WN
+Lbl AP
+ClrHome
+Disp "YOU HAVE ALREADY","PURCHASED THIS","EXTRA"
+Pause 
+Goto WN
+Lbl KK
+K+1→K
+0→B
+If ʟGAME(2)-1≤0
+Goto DN
+ʟGAME(2)-1→ʟGAME(2)
+Goto A1
+Lbl A4
+ClrHome
+Menu("CONTINUE?","CONIUE GAME...",A1,"NEW GAME",A5)
+Lbl A5
+10→ʟGAME(2)
+1→ʟGAME(4)
+5→ʟGAME(5)
+1→ʟGAME(6)
+0→ʟGAME(7)
+1→ʟGAME(10)
+Goto A1
+Lbl S1
+If ʟGAME(7)-15<0
+Goto N1
+If ʟGAME(7)-15≥0
+Goto Y1
+Lbl Y1
+ʟGAME(4)+1→ʟGAME(4)
+ʟGAME(7)-15→ʟGAME(7)
+Goto WN
+Lbl N1
+ClrHome
+Disp "NOT ENOUGH MONEY"
+Pause 
+ClrHome
+Goto WN
+Lbl S2
+If ʟGAME(7)-20<0
+Goto NO
+If ʟGAME(7)≥0
+Goto YS
+Lbl YS
+ʟGAME(2)+1→ʟGAME(2)
+ʟGAME(7)-20→ʟGAME(7)
+Goto WN
+Lbl NO
+ClrHome
+Disp "NOT ENOUGH MONEY"
+Pause 
+ClrHome
+Goto WN
+Lbl RR
+ClrHome
+ClrDraw
+Text(0,0,"ONCE GAME IS STARTED , PRESS")
+Text(7,0,"ENTER TO CAUSE DAMAGE TO")
+Text(14,0,"ENEMY")
+Text(28,0,"HEALTH=")
+Text(28+7,0,"WHEN ENEMY TOUCHES YOU, YOU")
+Text(28+(7*2),0,"LOSE 1 POINT HEALTH AND")
+Text(28+(7*3),0,"ENEMY IS PUSHED BACK")
+Pause 
+ClrDraw
+Text(0,0,"WEAPON BONUS=")
+Text(7,0,"THE WEAPON BONUS IS THE")
+Text(14,0,"AMOUNT TAKEN AWAY FROM")
+Text(21,0,"ENEMY HEALTH")
+Text(21+(7*2),0,"YOUR MONEY =")
+Text(21+(7*3),0,"WHEN YOU BEAT A LEVEL, 10"
+Text(21+(7*4),0,"MONEY IS ADDED TO YOUR"
+Text(21+(7*5),0,"TOTAL MONEY")
+Pause 
+ClrDraw
+Text(0,0,"SKILL LEVEL =")
+Text(7,0,"THE SKILL LVL IS THE SPEED")
+Text(14,0,"AT WHICH THE ENEMY ATTACKS")
+Text(21+7,0,"LEVEL ="
+Text(21+(7*2),0,"ENEMY GETS MORE HEALTH ON"
+Text(21+(7*3),0,"EACH LVL")
+Pause 
+ClrDraw
+Text(0,0,"ENEMIES:")
+Text(7,0,"ROCK= AN EVIL ROCK"
+Text(14,0,"BOB= YOUR EVIL TWIN"
+Text(21,0,"GIANT= A GIANT"
+Pause 
+ClrDraw
+Goto OT
+Lbl HS
+ClrHome
+ClrDraw
+Text(0,0,"HIGHEST LEVEL = ":Text(7,0,ʟGAME(1)," WITH SKILL LVL  ",ʟGAME(12)):Text(14,0,"HIGHEST MONEY = "):Text(21,0,ʟGAME(8)):Text(28,0,"MOST HEALTH = "):Text(28+7,0,ʟGAME(9)):Text(28+(7*2),0,"HIGHEST SKILL = "):Text(28+(7*3),0,ʟGAME(3)," ON LVL ",ʟGAME(11)):Text(28+(7*4),0,"PLAYED ",ʟGAME(14)," TIMES"
+Pause 
+ClrDraw
+Goto θθ
+Lbl OT
+ClrHome
+Menu("OTHER","RULES",RR,"INFO",XX,"MASTER RESET",MS,"GAME MENU",θθ)
+Lbl MS
+ClrHome
+ClrDraw
+Text(0,0,"RESETS HIGH SCORES AND"):Text(7,0,"SAVED GAME"):Text(21,0,"ARE YOU SURE?")
+Pause 
+ClrDraw
+ClrHome
+Menu("MASTER RESET?","YES",Z1,"NO",OT)
+Lbl Z1
+0→ʟGAME(1)
+10→ʟGAME(2)
+1→ʟGAME(3)
+1→ʟGAME(4)
+5→ʟGAME(5)
+1→ʟGAME(6)
+0→ʟGAME(7)
+0→ʟGAME(8)
+0→ʟGAME(9)
+1→ʟGAME(10)
+1→ʟGAME(11)
+1→ʟGAME(12)
+1→ʟGAME(13)
+0→ʟGAME(14)
+Disp "THE ENTER GAME","HAS BEEN RESET"
+Pause 
+Goto OT
+Lbl O1
+ClrHome
+Disp "CURRENT SKILL ="
+Output(2,1,ʟGAME(10))
+Pause 
+ClrHome
+Menu("NEW SKILL?","SKILL UP 1",S9,"SKILL DOWN 1",S8,"NO NEW SKILL",WN)
+Lbl S9
+ʟGAME(10)+1→ʟGAME(10)
+Goto WN
+Lbl S8
+If ʟGAME(10)-1≤0
+Goto O2
+If ʟGAME(10)-1>0
+ʟGAME(10)-1→ʟGAME(10)
+Goto WN
+Lbl O2
+ClrHome
+Disp "SKILL CANT BE 0","OR LOWER"
+Pause 
+Goto WN
+Lbl DN
+ClrHome
+RecallPic 4
+10→ʟGAME(2)
+1→ʟGAME(4)
+5→ʟGAME(5)
+1→ʟGAME(6)
+0→ʟGAME(7)
+1→ʟGAME(10)
+Pause 
+ClrDraw
+Goto θθ
+Lbl GN
+ClrDraw
+Text(0,0,"LEVEL ",ʟGAME(6)," SUMMARY")
+If ʟGAME(6)≥0 and ʟGAME(6)≤9
+Line(⁻10,8,1,8)
+If ʟGAME(6)≥10 and ʟGAME(6)≤99
+Line(⁻10,8,2,8)
+Text(14,0,"+ 10 MONEY")
+Text(21,0,"LOST ",K," HEALTH")
+Text(21+7,0,"NEW LVL RECORD?")
+If Z>0
+Text(21+7,70,"YES"
+If Z=0
+Text(21+7,70,"NO")
+Text(21+(7*2),0,"NEW MONEY RECORD?")
+If X>0
+Text(21+(7*2),70,"YES")
+If X=0
+Text(21+(7*2),70,"NO")
+Text(21+(7*3),0,"NEW HEALTH RECORD?")
+If Y>0
+Text(21+(7*3),70,"YES")
+If Y=0
+Text(21+(7*3),70,"NO")
+Text(21+(7*4),0,"NEW SKILL RECORD?")
+If Q>0
+Text(21+(7*4),70,"YES")
+If Q=0
+Text(21+(7*4),70,"NO")
+(((87-ʟGAME(4))/ʟGAME(10))*ʟGAME(2))+ʟGAME(6)→W
+If W≥ʟGAME(6)
+Text(21+(7*5),0,"ESTIMATED DEATH = LVL ",iPart(W)
+If W<ʟGAME(6)
+Text(21+(7*5),0,"ESTIMATED DEATH = ERROR!"
+Pause 
+Goto WN
+Lbl XX
+ClrDraw
+Text(0,0,"THE ENTER GAME...CAUSE YOU")
+Text(7,0,"ONLY PRESS ENTER")
+Text(50,3,"VERSION =")
+Text(57,3,"5.2 "
+Pause 
+Goto OT
+::::::::::::::::::::::::::::::::"CREDITS=                      DESIGNER=       VINCENT MOSSMAN PROG. ENGINEER= VINCENT MOSSMAN EDITOR=         VINCENT MOSSMAN SPECIAL THANKS= VINCENT MOSSMAN                 GAME MADE IN    MEMORY OF=      DON F. MOSSMAN  BILLY MAYS (RIP)M. JACKSON      FARRAH F.       OTHER DEAD        FAMOUS PEOPLE PEOPLE WHO HAVE   DIED UNFAIRLY                                 THIS PROGRAM    MADE IN USA!
+:::::::::::::::::::::::::::::::

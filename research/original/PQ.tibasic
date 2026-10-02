@@ -1,0 +1,32 @@
+ClrHome
+Disp "*NEW ENTER GAME","INTEGRATION","","FOR EVERY","LEVEL +1 LEVEL","IN ENTER GAME"
+Pause 
+ClrHome
+ʟPQGD(2)→B
+ʟPQGD(1)→A
+Lbl 2
+ʟGAME(6)+1→ʟGAME(6)
+Goto θ1
+Lbl θ1
+A→ʟPQGD(1)
+Output(1,1,"LEVEL:")
+Output(1,8,A)
+Output(2,1,"EG LEVEL:")
+ʟGAME(6)→Z
+Output(2,11,Z)
+Lbl 1
+iPart(B)→C
+If C>16
+Goto 3
+If C≤16
+Output(7,1,"PROGRESS:")
+Output(7,11,iPart(((B*100)/16)-6))
+Output(8,C,":")
+B+.1→B
+B→ʟPQGD(2)
+Goto 1
+Lbl 3
+A+1→A
+1→B
+Output(8,1,"                "):Output(7,9,"     ")
+Goto 2

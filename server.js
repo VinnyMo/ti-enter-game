@@ -165,7 +165,7 @@ app.get('*', (req, res) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, '127.0.0.1', () => {
   console.log(`TI Emulator Server running on port ${PORT}`);
   console.log(`Main page: http://localhost:${PORT}`);
   console.log(`Game: http://localhost:${PORT}/ti-emulator`);

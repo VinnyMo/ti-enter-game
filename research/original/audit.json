@@ -1,0 +1,67 @@
+{
+  "decoder": "tivars 1.1.1, TI_83 token table",
+  "files": [
+    {
+      "file": "GAME.83p",
+      "sha256": "e3cf3ea1cd570bf45e63d76f6cdfad0e6685932728423bb67ca8385d5208752b",
+      "file_bytes": 7638,
+      "token_bytes": 7564,
+      "token_sha256": "d05100398b7bf94adfb579995d8d253c78bb587ea669561441218b2401cf701c",
+      "checksum_valid": true,
+      "all_tokens_recognized": true,
+      "token_bytes_roundtrip_exact": true,
+      "decoded_text_reencodes_exactly": true
+    },
+    {
+      "file": "GAME.8xp",
+      "sha256": "02a8279b84b314a8e93962181a94a32f54dcff28c315cf414bbbd2423dc7a38e",
+      "file_bytes": 7640,
+      "token_bytes": 7564,
+      "token_sha256": "d05100398b7bf94adfb579995d8d253c78bb587ea669561441218b2401cf701c",
+      "checksum_valid": true,
+      "all_tokens_recognized": true,
+      "token_bytes_roundtrip_exact": true,
+      "decoded_text_reencodes_exactly": true
+    }
+  ],
+  "program_payloads_identical": true,
+  "decoded_source": "GAME.tibasic",
+  "source_lines": 387,
+  "multi_character_token_counts": {
+    "Pxl-On(": 83,
+    "Text(": 73,
+    "Pxl-Off(": 64,
+    "Lbl ": 48,
+    "Goto ": 48,
+    "If ": 46,
+    "ClrHome": 29,
+    "Pause ": 21,
+    "ClrDraw": 17,
+    "Disp ": 10,
+    "Menu(": 9,
+    " and ": 4,
+    "ZStandard": 2,
+    "RecallPic ": 2,
+    "Output(": 2,
+    "Line(": 2,
+    "prgm": 1,
+    "AxesOff": 1,
+    "CoordOff": 1,
+    "AxesOn": 1,
+    "CoordOn": 1,
+    "Stop": 1,
+    "End": 1,
+    "iPart(": 1
+  },
+  "external_references": [
+    "list GAME (indices 1-14 and 100)",
+    "Pic2",
+    "Pic4",
+    "program PQ"
+  ],
+  "notes": [
+    "Original binary files are unchanged.",
+    "Token recognition and checksums do not establish successful execution on a calculator.",
+    "External references were identified by static source inspection."
+  ]
+}
