@@ -1,148 +1,120 @@
-# CLAUDE.md
+# THE ENTER GAME
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This site runs Vincent Mossman's recovered **TI-BASIC** programs directly in a
+focused browser interpreter. It is not Z80/hardware emulation. Do not replace the
+original game logic with a hand-written JavaScript game.
 
-## Project Overview
+## Serving and deployment
 
-This is **THE ENTER GAME** - a complete JavaScript recreation of a TI-83 Plus calculator game originally created by Vincent Mossman. The project has evolved from TI emulation to a standalone web application.
+- `npm start` runs the existing Express server on `127.0.0.1:3002`.
+- `ti-enter-game.service` has working directory `/home/maestro/ti_playground`.
+- Nginx proxies `https://vincentmossman.com/ti-emulator/` to this service.
+- `public/index.html` is the production entry; `public/preview.html` is the review entry.
+- Both load `public/ti/app.mjs`. Assets and imports must be relative to the subpath.
+- Express serves these files directly. Static changes do not need a service restart.
+- Prior index, server, and instructions are in `backups/pre-ti-basic/`.
+- `public/legacy.html` keeps the previous recreation playable with its original save key.
+- The pre-restoration server.js change and tracked node_modules changes predate this work.
+  Preserve them. The emulator restoration does not require changing server.js.
 
-## Current Project Structure
+## Preservation and provenance
 
-### Server Setup
-```bash
-# Start the game server
-node server.js
+The source archive is `research/original/TI83.tig`, downloaded from:
+https://github.com/VinnyMo/highSchool_Yoink/blob/master/TI83.tig
 
-# Server runs on port 3002
-# Accessible via nginx at /ti-emulator/
-```
+It contains 92 variables, including all six dependencies used by GAME/PQ. No
+calculator ROM is present. The archive's GAME.83p equals the root GAME.83p exactly;
+root GAME.8xp contains the same program tokens in a Plus-format wrapper.
 
-### Key Files
-- `public/index.html` - Complete JavaScript recreation of THE ENTER GAME
-- `server.js` - Express server for hosting the game
-- `package.json` - Node.js dependencies (express, multer, cors)
-- `GAME.8xp` - Original TI-83 calculator game file (reference)
+- `research/original/backup/`: untouched GAME.83p, GAME.83l, PQ.83p, PQGD.83l,
+  Pic2.83i and Pic4.83i.
+- `research/original/GAME.tibasic` and `PQ.tibasic`: readable decoded originals.
+- `audit.json` and `backup-audit.json`: checksums and verification.
+- `public/ti/assets/`: byte-identical deployable copies; manifest.json pins hashes.
+- `files.mjs`: reads TI headers, checksums, program tokens, BCD lists, and pictures.
+- `tokens.json`: used-token subset derived with tivars 1.1.1 and its TI_83 table.
+- `large-font.json`: printable glyphs from TI-JS `src/gen/encoding.json`, commit
+  ed188eb (2025-10-12); retain `public/ti/licenses/ti-js.txt`.
+- Retain the TI-Toolkit attribution and `public/ti/licenses/tivars.txt`.
 
-## Game Architecture
+Do not edit or retokenize the original binaries. Runtime corrections belong in
+the interpreter/display layer; intentional game edits require a distinct version.
+The `.83*` archive suggests a TI-83; the owner recalls possibly a Plus. Neither
+model/OS nor cycle-accurate behavior has been conclusively verified on hardware.
 
-### Game Mechanics
-THE ENTER GAME is a simple action game where:
-- Player controls a stick figure using only the ENTER key
-- Enemies (ROCK, BOB, GIANT) attack by moving left across screen
-- Player attacks by pressing ENTER (damage = weapon bonus)
-- Enemy collision causes player health loss
-- Game progression through levels with increasing difficulty
+## Architecture
 
-### Technical Implementation
-- **Canvas Rendering**: 300x200px game area with pixel-perfect sprites
-- **TI-83 Timing**: Authentic calculator-speed animations (800ms base intervals)
-- **Sprite System**: Pixel array-based rendering for authentic retro look
-- **Save System**: LocalStorage for game progress and high scores
-- **Menu Navigation**: Complete recreation of original TI calculator interface
+- `runtime.mjs`: scoped expression parser, compiler, bounded BASIC VM.
+- `display.mjs`: separate home/graph buffers, 96x64 LCD, original picture decoding,
+  pixel drawing, line coordinates, Text/Output/Disp/Menu rendering.
+- `bundle.mjs`: loads and verifies binary assets; compiles GAME/PQ; starts sessions.
+- `app.mjs`: keyboard/pointer controls, bounded scheduling, options, persistence.
+- `style.css`: responsive calculator case and five visible game keys.
 
-### Key Game Functions
-- `drawStickFigure()` - Renders 6-pixel tall player sprite at `public/index.html:455`
-- `drawEnemy()` - Renders enemy sprites based on type at `public/index.html:475`
-- `startEnemyAttack()` - Handles enemy movement and collision at `public/index.html:554`
-- `handleEnter()` - Primary game input handler at `public/index.html:526`
-- `winLevel()` - Level progression logic at `public/index.html:614`
+All commands used by the recovered programs are handled. This is not a general
+TI-BASIC environment. Unknown commands produce an error rather than silent no-ops.
+Quoted strings, colons, omitted closing quotes/parentheses, named lists, labels,
+and subprogram calls are supported. Goto finds the first matching label, preserving
+the duplicate A4 in GAME. No eval or Function constructor is used.
 
-## Nginx Configuration
+The original behavior includes turn-based movement, player on the right, ROCK
+through level 5, BOB on 6-14, GIANT on 15+, weapon upgrades costing 15, and money
+being awarded at NEXT LEVEL. Preserve overshoot/negative enemy HP and other source
+quirks. Do not silently fix the original program while fixing the interpreter.
 
-The game is served through nginx proxy at `/ti-emulator/`:
-- Main proxy: `localhost:3002/` 
-- Config file: `/etc/nginx/sites-enabled/vincentmossman.com`
-- WASM file proxying configured for emulation assets
+Fresh GAME state is initialized by executing its own Z1 master-reset routine on
+a 100-element list. PQ has no reset routine; its fresh list uses [1,1,0]. The 2014
+archive profile starts from the recovered GAME/PQGD lists instead.
 
-## Development History
+## Fidelity limits
 
-### Completed Features
-✅ Complete game recreation with authentic TI-83 styling  
-✅ Proper sprite rendering (stick figure player, ROCK/BOB/GIANT enemies)  
-✅ Enemy attack animations with calculator-speed timing  
-✅ Collision detection and health system  
-✅ Level progression and money/weapon upgrades  
-✅ Save/load game functionality  
-✅ Store system for purchasing upgrades  
-✅ High scores and statistics tracking  
-✅ Complete menu system recreation  
+A physical/ROM reference run is still outstanding because no usable ROM was
+available. Wabbitemu/Numero can be investigated if one becomes available; do not
+claim this build is a full hardware emulator or cycle-accurate.
 
-### Major Fixes Applied
-- Fixed game progression when enemy HP reaches 0
-- Corrected sprite orientations (were rotated 90 degrees)
-- Implemented proper enemy attack movement (right-to-left)
-- Fixed player/enemy positioning (both at bottom Y=160)
-- Resolved JavaScript syntax errors in navigation
-- Updated branding from "METH LABS INC" to "MLI" for discretion
-- Cleaned up development environment (removed emulation files)
+The graphics use original coordinates and picture pixels. Small Text glyphs are
+hand-drawn approximations; large glyphs are from TI-JS. Numeric operations round
+to 14 significant decimal digits using JavaScript numbers; this is not a complete
+TI decimal floating-point implementation. Progress Quest is paced at roughly 300
+statements/second, with bounded frame work and no hidden-tab catch-up. Other game
+screens run to their next original Pause/Menu. Full graphing, axes rendering, OS
+menus, ROM boot, and arbitrary calculator programs are out of scope.
 
-## Original Game Reference
+## Controls and saves
 
-The `GAME.8xp` file contains the original TI-83 Plus assembly code with:
-- Sprite coordinate data for accurate recreation
-- Game logic patterns and menu structures  
-- Original variable names and flow control
-- Credit information and version history
+Enter advances Pause and selects Menu; up/down select menu items. All four arrows
+are shown, but the original main game does not use left/right. Enter does not
+repeat while held; arrow repetition is limited to menus. Options provides pause,
+return to gameroom (variables retained), import/export, fresh reset, and profile
+switching. Progress Quest and Endless Pushing need this external escape mechanism.
 
-## Server Commands
+Storage keys are `enter-game.tibasic.v1.play` and `enter-game.tibasic.v1.archive`.
+Each stores the instruction position, variables, stack, wait state, and LCD
+buffers. Assets are immutable. The previous website's `enterGameSave` is untouched.
+The archive slot is a playable copy, never a write to the original backup. Invalid
+saves are left intact and automatic writes blocked until explicit reset/import.
 
-### Development Mode
-```bash
-# Install dependencies
-npm install
+Bump storage/schema identity when changing instruction layout or serialized
+semantics. Validate imported state transactionally. Save progress before slot
+switches and page hide. Do not reset or delete someone else's browser storage.
 
-# Start server manually
-npm start
-# or
-node server.js
+## Verification
 
-# Server will be available at:
-# Local: http://localhost:3002
-# Public: https://vincentmossman.com/ti-emulator/
-```
+Run `npm test` and `npm run verify:assets`. Tests cover source checksums, original
+initialization, sprites and thresholds, combat, money/weapon/health purchasing,
+skill, rules, summary, death, reset, historical preservation, companion games,
+decimal increments, and complete state restoration. These source-based checks
+are not a substitute for a future physical-calculator comparison.
 
-### Production Service (systemd)
-The game runs as a systemd service for automatic startup and management:
+Review the preview in an isolated browser context: keyboard Enter and arrows,
+touch controls, Options, fresh/historical separation, reload with identical LCD,
+320px/390px layouts, and console errors. Ensure legacy saves remain unchanged.
+Verify the public page and asset hashes after deployment. Rollback the entry by
+copying `backups/pre-ti-basic/index.html` to `public/index.html`; new saves and
+original assets should remain intact.
 
-```bash
-# Service management
-sudo systemctl start ti-enter-game.service     # Start service
-sudo systemctl stop ti-enter-game.service      # Stop service  
-sudo systemctl restart ti-enter-game.service   # Restart service
-sudo systemctl status ti-enter-game.service    # Check status
-
-# View logs
-sudo journalctl -u ti-enter-game.service -f    # Follow logs
-sudo journalctl -u ti-enter-game.service       # View all logs
-
-# Service is enabled for automatic startup on boot
-# Location: /etc/systemd/system/ti-enter-game.service
-```
-
-#### Service Configuration
-Service file uses NVM Node.js path and runs as user `maestro`:
-- **ExecStart**: `/home/maestro/.nvm/versions/node/v20.19.3/bin/node server.js`
-- **WorkingDirectory**: `/home/maestro/ti_playground`
-- **User**: `maestro`
-- **Auto-restart**: Enabled with 10s delay
-- **Boot startup**: Enabled via `systemctl enable`
-
-## Development Notes
-
-### Code Style
-- Authentic TI-83 calculator styling with green-on-black terminal theme
-- Pixel-perfect sprite rendering with 2-3px scaling
-- Monospace fonts and calculator-style UI elements
-- Responsive design for mobile and desktop
-
-### Game Balance
-- Original health/damage values maintained (10 health, weapon bonus damage)
-- Enemy health scales with level (+2 HP per level)
-- Store prices: Weapon upgrade $100, Health upgrade $20
-- Enemy types cycle every 5 levels (ROCK → BOB → GIANT)
-
-### Testing
-- Clear browser cache when testing changes
-- Multiple save slots supported via localStorage
-- Master reset function available in "OTHER" menu
-- Debug info available in browser console
+The initial deployment's public HTTPS/browser hash checks are recorded in
+`research/live-verification.json` (14 files). Direct Python HTTP requests were
+rejected with 403; the actual browser loaded the site successfully and fetched
+each file for byte-for-byte verification. Do not treat a bot-client 403 alone as
+an application outage.

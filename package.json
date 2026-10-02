@@ -1,10 +1,12 @@
 {
   "name": "ti-enter-game",
   "version": "1.0.0",
-  "description": "THE ENTER GAME - JavaScript recreation of TI-83 Plus calculator game",
+  "description": "THE ENTER GAME - original TI-BASIC programs running in a browser interpreter",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node tests/runtime.test.mjs",
+    "verify:assets": "node scripts/verify-assets.mjs"
   },
   "dependencies": {
     "cors": "^2.8.5",

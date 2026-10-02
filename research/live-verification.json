@@ -1,0 +1,89 @@
+{
+  "method": "Public HTTPS fetch from isolated Chrome browser context",
+  "results": [
+    {
+      "path": "index.html",
+      "status": 200,
+      "mime": "text/html; charset=UTF-8",
+      "sha256": "81a767705110d30717903d008bd9904772ced8600fb0b9a4e00660deca3c04ef"
+    },
+    {
+      "path": "legacy.html",
+      "status": 200,
+      "mime": "text/html; charset=UTF-8",
+      "sha256": "4b10eed11be4ff87ff0b35b9c436ccdfe19a9149f9d390bd0fbed063ea29a52d"
+    },
+    {
+      "path": "ti/app.mjs",
+      "status": 200,
+      "mime": "application/javascript; charset=UTF-8",
+      "sha256": "20d2a39923bad757471c2f744e1f6417785cb18c7a83f310c5ef8a3e60545ad8"
+    },
+    {
+      "path": "ti/runtime.mjs",
+      "status": 200,
+      "mime": "application/javascript; charset=UTF-8",
+      "sha256": "3f753eb720e2f3c6bf26b428981bae8e6fe7b64428b8fb430caa9d873010e1c1"
+    },
+    {
+      "path": "ti/display.mjs",
+      "status": 200,
+      "mime": "application/javascript; charset=UTF-8",
+      "sha256": "e99f871f89710f1e8e6180732a00a82ef909024cfd534704bd131793e96a8c0c"
+    },
+    {
+      "path": "ti/files.mjs",
+      "status": 200,
+      "mime": "application/javascript; charset=UTF-8",
+      "sha256": "566de15ddc4b97f85793248ce71f4f1fe72725c1a30dad570318e63eb666a20b"
+    },
+    {
+      "path": "ti/bundle.mjs",
+      "status": 200,
+      "mime": "application/javascript; charset=UTF-8",
+      "sha256": "fdd275f2992c33795e94ad1bcd6a01defc7b5370ec834517bf4d48a09ec7c7e8"
+    },
+    {
+      "path": "ti/style.css",
+      "status": 200,
+      "mime": "text/css; charset=UTF-8",
+      "sha256": "a657b6bba69e8cfe596ea99b8b43f0fc92be9005517940682688e11a1b1197e6"
+    },
+    {
+      "path": "ti/assets/Pic4.83i",
+      "status": 200,
+      "mime": "application/octet-stream",
+      "sha256": "b0d151c17eb4d2fa60c7c79eb294d4f7be16c468a3326a5166ccfbe8b0125818"
+    },
+    {
+      "path": "ti/assets/PQGD.83l",
+      "status": 200,
+      "mime": "application/octet-stream",
+      "sha256": "03f5496cdd1c2d9cf992c0cfee5a12bf6c0bb2528a3a90191336cfc9f9ddb1ba"
+    },
+    {
+      "path": "ti/assets/GAME.83l",
+      "status": 200,
+      "mime": "application/octet-stream",
+      "sha256": "ea6de788783bfe99d13468b9aacdb5d5032ce361a93550fc02266c4c1f9b1d72"
+    },
+    {
+      "path": "ti/assets/Pic2.83i",
+      "status": 200,
+      "mime": "application/octet-stream",
+      "sha256": "4dd99fac82580985117ef1941d0d888ba1de8ded3b468151cadcaa8520a20c1c"
+    },
+    {
+      "path": "ti/assets/PQ.83p",
+      "status": 200,
+      "mime": "application/octet-stream",
+      "sha256": "6e908941ff079a413fe335e9ee463015edd42d74599cf08eafce6f6edcbbc23d"
+    },
+    {
+      "path": "ti/assets/GAME.83p",
+      "status": 200,
+      "mime": "application/octet-stream",
+      "sha256": "e3cf3ea1cd570bf45e63d76f6cdfad0e6685932728423bb67ca8385d5208752b"
+    }
+  ]
+}
